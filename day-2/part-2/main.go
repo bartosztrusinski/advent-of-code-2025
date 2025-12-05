@@ -1,20 +1,18 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math"
-	"os"
 	"strconv"
 	"strings"
-)
 
-const filePath = "day-2/input.txt"
+	"github.com/bartosztrusinski/advent-of-code-2025/util"
+)
 
 func main() {
 	sum := 0
 
-	scanInput(func(input string) {
+	util.ScanInput("day-2/input.txt", func(input string) {
 		for idRange := range strings.SplitSeq(input, ",") {
 			idRangeSlice := strings.Split(idRange, "-")
 			firstId, _ := strconv.Atoi(idRangeSlice[0])
@@ -72,22 +70,4 @@ func findDivisors(num int) []int {
 	}
 
 	return divisors
-}
-
-func scanInput(callback func(string)) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		callback(scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-		return
-	}
 }

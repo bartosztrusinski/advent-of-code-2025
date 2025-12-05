@@ -1,19 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
-)
 
-const filePath = "day-1/input.txt"
+	"github.com/bartosztrusinski/advent-of-code-2025/util"
+)
 
 func main() {
 	dialPosition := 50
 	password := 0
 
-	scanInput(func(input string) {
+	util.ScanInput("day-1/input.txt", func(input string) {
 		direction := rune(input[0])
 		distance, _ := strconv.Atoi(input[1:])
 		newDialPosition, pointedAtZeroCount := rotateDial(dialPosition, direction, distance)
@@ -42,22 +40,4 @@ func rotateDial(currentPosition int, direction rune, distance int) (int, int) {
 	}
 
 	return newPosition, pointedAtZeroCount
-}
-
-func scanInput(callback func(string)) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		callback(scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-		return
-	}
 }
