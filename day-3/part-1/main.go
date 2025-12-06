@@ -6,11 +6,13 @@ import (
 	"github.com/bartosztrusinski/advent-of-code-2025/util"
 )
 
+const joltageLength = 2
+
 func main() {
 	totalJoltage := 0
 
 	util.ScanInput("day-3/input.txt", func(input string) {
-		bank, _ := digitsToSlice(input)
+		bank, _ := stringToDigits(input)
 		totalJoltage += findLargestJoltage(bank)
 	})
 
@@ -18,28 +20,36 @@ func main() {
 }
 
 func findLargestJoltage(bank []int) int {
-	firstJoltageDigit, secondJoltageDigit := 0, 0
+	joltageDigits := make([]int, joltageLength)
+	startIndex := 0
 
-	for index, joltage := range bank {
-		isLastDigit := index == len(bank)-1
-		if firstJoltageDigit < joltage && !isLastDigit {
-			firstJoltageDigit = joltage
-			secondJoltageDigit = 0
-		} else if secondJoltageDigit < joltage {
-			secondJoltageDigit = joltage
+	for index := range joltageLength {
+		for j := startIndex; j <= len(bank)-joltageLength+index; j++ {
+			if joltageDigits[index] < bank[j] {
+				joltageDigits[index] = bank[j]
+				startIndex = j + 1
+			}
 		}
 	}
 
-	return firstJoltageDigit*10 + secondJoltageDigit
+	return digitsToNumber(joltageDigits)
 }
 
-func digitsToSlice(s string) ([]int, error) {
-	out := make([]int, len(s))
-	for i, ch := range s {
+func stringToDigits(str string) ([]int, error) {
+	digits := make([]int, len(str))
+	for i, ch := range str {
 		if ch < '0' || ch > '9' {
 			return nil, fmt.Errorf("non-digit at index %d", i)
 		}
-		out[i] = int(ch - '0')
+		digits[i] = int(ch - '0')
 	}
-	return out, nil
+	return digits, nil
+}
+
+func digitsToNumber(digits []int) int {
+	number := 0
+	for _, digit := range digits {
+		number = number*10 + digit
+	}
+	return number
 }
