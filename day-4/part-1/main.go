@@ -24,15 +24,6 @@ func main() {
 	fmt.Println(accessiblePaperCount)
 }
 
-func ReadInputLines(path string) []string {
-	fileContent, err := os.ReadFile(path)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil
-	}
-	return strings.Split(string(fileContent), "\n")
-}
-
 func countAdjacentPaper(lines []string, row, col int) int {
 	rowStart := max(row-1, 0)
 	rowEnd := min(row+1, len(lines)-1)
@@ -49,4 +40,13 @@ func countAdjacentPaper(lines []string, row, col int) int {
 	}
 
 	return adjacentPaperCount
+}
+
+func ReadInputLines(path string) []string {
+	fileContent, err := os.ReadFile(path)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return nil
+	}
+	return strings.Split(string(fileContent), "\n")
 }
