@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	lines := ReadInputLines("day-4/input.txt")
+	lines := readInputLines("day-4/input.txt")
 	totalAccessiblePaperCount := 0
 
 	for {
@@ -59,7 +59,7 @@ func countAdjacentPaper(lines []string, row, col int) int {
 	return adjacentPaperCount
 }
 
-func ReadInputLines(path string) []string {
+func readInputLines(path string) []string {
 	fileContent, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
