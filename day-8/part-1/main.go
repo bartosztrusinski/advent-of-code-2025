@@ -42,17 +42,18 @@ func connectShortestBoxes(positions [][3]int, connectionsToMake int) [][]int {
 		}
 		usedPairs[closestBoxIndices] = true
 		circuitIndices := getCircuitIndices(circuits, closestBoxIndices)
-		if circuitIndices[0] == -1 && circuitIndices[1] == -1 {
+		switch {
+		case circuitIndices[0] != -1 && circuitIndices[0] == circuitIndices[1]:
+			continue
+		case circuitIndices[0] == -1 && circuitIndices[1] == -1:
 			circuits = append(circuits, closestBoxIndices[:])
-		} else if circuitIndices[0] != -1 && circuitIndices[1] != -1 {
-			if circuitIndices[0] != circuitIndices[1] {
-				circuits[circuitIndices[0]] = append(circuits[circuitIndices[0]], circuits[circuitIndices[1]]...)
-				circuits = append(circuits[:circuitIndices[1]], circuits[circuitIndices[1]+1:]...)
-			}
-		} else if circuitIndices[0] != -1 {
+		case circuitIndices[0] != -1 && circuitIndices[1] == -1:
 			circuits[circuitIndices[0]] = append(circuits[circuitIndices[0]], closestBoxIndices[1])
-		} else {
+		case circuitIndices[0] == -1 && circuitIndices[1] != -1:
 			circuits[circuitIndices[1]] = append(circuits[circuitIndices[1]], closestBoxIndices[0])
+		case circuitIndices[0] != circuitIndices[1]:
+			circuits[circuitIndices[0]] = append(circuits[circuitIndices[0]], circuits[circuitIndices[1]]...)
+			circuits = append(circuits[:circuitIndices[1]], circuits[circuitIndices[1]+1:]...)
 		}
 	}
 	return circuits
