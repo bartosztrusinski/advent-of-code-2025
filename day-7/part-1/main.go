@@ -8,28 +8,26 @@ import (
 
 func main() {
 	lines := readInputLines("day-7/input.txt")
+	count := countSplits(lines)
+	fmt.Println(count)
+}
+
+func countSplits(lines []string) int {
 	count := 0
-	for i, line := range lines {
-		if i == len(lines)-1 {
-			break
-		}
+	for i, line := range lines[:len(lines)-1] {
 		for j, char := range line {
 			if char == 'S' || char == '|' {
-				if lines[i+1][j] == '^' {
-					lines[i+1] = lines[i+1][:j-1] + "|^|" + lines[i+1][j+2:]
+				nextLine := lines[i+1]
+				if nextLine[j] == '^' {
+					lines[i+1] = nextLine[:j-1] + "|^|" + nextLine[j+2:]
 					count++
 				} else {
-					lines[i+1] = lines[i+1][:j] + "|" + lines[i+1][j+1:]
+					lines[i+1] = nextLine[:j] + "|" + nextLine[j+1:]
 				}
 			}
 		}
 	}
-
-	for _, line := range lines {
-		fmt.Println(line)
-	}
-
-	fmt.Println(count)
+	return count
 }
 
 func readInputLines(path string) []string {
